@@ -1,0 +1,39 @@
+import edu.duke.FileResource;
+
+public class CaesarCipher {
+	public static String encrypt2(String input, int key){
+		boolean isLow = false;
+		StringBuilder encrypted = new StringBuilder(input);
+		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		String shiftedAlphabet = alphabet.substring(key) + alphabet.substring(0,key);
+		
+		
+		for(int i = 0; i < encrypted.length(); i++){
+			char currChar = encrypted.charAt(i);
+			if(Character.isLowerCase(currChar)){
+				currChar = Character.toUpperCase(currChar);
+				isLow = true;
+			}
+			int idx = alphabet.indexOf(currChar);
+			char newChar = shiftedAlphabet.charAt(idx);
+			if(isLow){
+				newChar = Character.toLowerCase(newChar);
+			}
+			encrypted.setCharAt(i,newChar);
+		}
+		return encrypted.toString();
+	
+	}
+	
+	public static void testCaesar(){
+		FileResource fr = new FileResource();
+		String message = fr.asString();
+		String encrypted = encrypt2(message,3);
+		System.out.println("key is "+ 3+"\n"+encrypted);
+	}
+	
+	public static void main(String agrs[]){
+//		testCaesar();
+		System.out.println(encrypt2("First Legion",23));
+	}
+}

@@ -1,0 +1,28 @@
+package week4;
+
+import edu.duke.FileResource;
+
+public class Tester {
+	private CaesarCipher cc;
+	private CaesarCracker crack;
+	private VigenereBreaker vb;
+	
+	private <T> void print(T t){
+		System.out.println(t);
+	}
+	public Tester(int key){
+		this.cc = new CaesarCipher(key);
+		this.crack = new CaesarCracker();
+		this.vb = new VigenereBreaker();
+	}
+	
+	public void testCaesarCipher(){
+		FileResource fr = new FileResource();
+		String text = fr.asString();
+		print("Before encrypt: ");
+		print(text);
+		print("After encrypt: ");
+		print(cc.encrypt(text));
+		
+	}
+}

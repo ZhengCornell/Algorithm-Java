@@ -1,0 +1,27 @@
+import java.io.File;
+
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+
+import edu.duke.FileResource;
+
+public class Part1 {
+	public static void tester(File src){
+		
+		FileResource fr = new FileResource(src);
+		CSVParser parser = fr.getCSVParser();
+	}
+	public static void countryInfo(CSVParser parser, String country){
+		for(CSVRecord record:parser){
+			String export  = record.get("Country");
+			if(export.contains(country)){
+				System.out.println(record.get("Country")+record.get("Exports")+record.get("Value"));
+			}
+		}
+	}
+	public static void main(String args[]){
+		File src = new File("/Users/Gz/Desktop/eclipse/IOliu/src/io/file/exports_small.csv");
+		tester(src);
+	}
+	
+}

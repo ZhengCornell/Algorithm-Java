@@ -1,0 +1,62 @@
+import edu.duke.FileResource;
+
+public class CaesarCipher {
+	public static String encrypt2(String input, int key){
+		boolean isLow = false;
+		StringBuilder encrypted = new StringBuilder(input);
+		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		String shiftedAlphabet = alphabet.substring(key) + alphabet.substring(0,key);
+		
+		
+		for(int i = 0; i < encrypted.length(); i++){
+			char currChar = encrypted.charAt(i);
+			if(Character.isLowerCase(currChar)){
+				currChar = Character.toUpperCase(currChar);
+				isLow = true;
+			}
+			int idx = alphabet.indexOf(currChar);
+			if(idx != -1){
+			char newChar = shiftedAlphabet.charAt(idx);
+			if(isLow){
+				newChar = Character.toLowerCase(newChar);
+			}
+			encrypted.setCharAt(i,newChar);
+		}
+		isLow = false;
+		}
+		return encrypted.toString();
+	
+	}
+	
+	public static void testCaesar(){
+		FileResource fr = new FileResource();
+		String message = fr.asString();
+		String encrypted = encrypt2(message,3);
+		System.out.println("key is "+ 3+"\n"+encrypted);
+	}
+	
+	public static String encryptTwoKeys(String input, int key1, int key2){
+		StringBuilder str = new StringBuilder(input);
+		StringBuilder str2 = new StringBuilder();
+		for(int i = 0; i < str.length(); i++){
+			if(i % 2 ==0){
+				String ss = encrypt2(input.substring(i,i+1),key1);
+				str2.append(ss);
+			}else if(i % 2 != 0){
+				String ss2 = encrypt2(input.substring(i,i+1),key2);
+				str2.append(ss2);
+			}
+		}
+		return str2.toString();
+		
+	}
+	
+	
+	
+	
+	public static void main(String agrs[]){
+//		testCaesar();
+		System.out.println(encrypt2("First Legion",23));
+		System.out.println(encryptTwoKeys("First Legion",23,17));
+	}
+}

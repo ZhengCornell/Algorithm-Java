@@ -1,0 +1,37 @@
+import java.io.File;
+
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+
+import edu.duke.FileResource;
+// String temp = row.get("TemperatureF");
+//int value = Integer.parseInt(temp);	
+public class Part2 {
+	public static void testColdestHourInFile(){
+		FileResource fr = new FileResource();
+		CSVParser parser = fr.getCSVParser();
+		CSVRecord coldest = coldestHourInFile(parser);
+		System.out.println("coldest is"+coldest.get("TimeEST")+coldest.get("TemperatureF"));
+	}
+	
+	public static CSVRecord coldestHourInFile(CSVParser parser){
+		CSVRecord coldestSoFar = null;
+		
+		for(CSVRecord currtRow:parser){
+			if(coldestSoFar == null){
+				coldestSoFar = currtRow;
+			}
+			else{
+				double currtT = Double.parseDouble(currtRow.get("TemperatureF"));
+				double coldestT = Double.parseDouble(coldestSoFar.get("TemperatureF"));
+				if(currtT <= coldestT){
+					coldestSoFar = currtRow;
+				}
+			}
+		}
+			return coldestSoFar;
+	}	
+	public static void main(String args[]){
+		testColdestHourInFile();	
+	}
+}

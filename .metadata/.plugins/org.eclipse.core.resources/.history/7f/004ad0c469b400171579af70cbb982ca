@@ -1,0 +1,30 @@
+
+public class QuickS {
+	public static int partition(int[] a, int l, int r){
+		int i = l;
+		int j = r + 1;
+		while(true){
+		while(a[++i] <= a[l]){
+			if(i == r)  break;
+		}
+		while(a[l] <= a[--j]){
+			if(j == l) break;
+		}
+		if(i >= j) break;
+		exch(a,i,j);
+		
+		}
+		exch(a,l,j);
+		return j;
+	}
+	public static void main(String[] args){
+		int[] a = {24,18,49,23};
+		partition(a,0,3);
+	}
+	
+	public static void exch(int[] a, int i, int j){
+		int swap = a[i];
+		a[i] = a[j];
+		a[j] = swap;
+	}
+}

@@ -1,0 +1,89 @@
+package week3;
+
+
+/**
+ * Write a description of class LogAnalyzer here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+
+import java.util.*;
+import edu.duke.*;
+
+public class LogAnalyzer
+{
+     private ArrayList<LogEntry> records;
+     
+     public LogAnalyzer() {
+         records = new ArrayList<LogEntry>();
+     }
+        
+     public void readFile() {
+         FileResource fr = new FileResource();
+         for(String line:fr.lines()){
+//        	 System.out.println(WebLogParser.parseEntry(line).toString());
+        	 records.add(WebLogParser.parseEntry(line));//装入的是logEntry格式
+        	 
+         }
+     }
+        
+     public void printAll() {
+         for (LogEntry le : records) {
+             System.out.println(le);
+         }
+     }
+     public int countUniqueIPs(){
+    	 int countUnique = 0;
+    	 List<String> l = new ArrayList<String>();//装ip的list
+    	 for (LogEntry le: records){
+    		 if(!l.contains(le.getIpAddress())){
+    			 l.add(le.getIpAddress());
+    			 countUnique++;
+    		 }else{
+    			 continue;
+    		 }
+    	 }
+    	 return countUnique;
+     }
+     public void printAllHigherThanNum(int num){
+    	 ArrayList<Integer> list = new ArrayList<Integer>();
+    	 System.out.println("Status more than " + num + " is");
+    	 for(LogEntry le:records){
+    		 if(le.getStatusCode() > num){
+    			 System.out.println(le.toString());
+    			 if(!list.contains(le.getStatusCode())){
+    				 list.add(le.getStatusCode());
+    			 }
+    		 }
+    	 }
+    	 for(Integer temp:list){
+    		 System.out.println(temp);
+    	 }
+     }
+     public ArrayList<String> uniqueIPVisitsOnDay(String someday){
+    	 ArrayList<String> list = new ArrayList<String>();//装当天所有不同ip的list
+    	 for(LogEntry le:records){
+    		 String leTime = le.getAccessTime().toString();//把日子变成string先
+    		 String leIP = le.getIpAddress();
+    		 if(leTime.indexOf(someday) != -1){
+    			 if(!list.contains(leIP)){
+    				 list.add(leIP);
+    			 }
+    		 }
+    	 } 
+    	 return list;
+     }
+     public int countUniqueIPsInRange(int low, int high){//code在这之间的不同的ip地址
+//    	 System.out.println("Status between "+low+" and "+high+" is ");
+    	 ArrayList<String> arr = new ArrayList<String>();
+    	 for(LogEntry le:records){
+    		 if(le.getStatusCode() >= low && le.getStatusCode() <= high){
+    			 if(!arr.contains(le.getIpAddress())){
+    				 arr.add(le.getIpAddress());
+    			 }
+    		 }
+    	 }
+    	 return arr.size();
+     }
+}

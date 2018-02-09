@@ -1,0 +1,59 @@
+package week2;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.duke.FileResource;
+
+public class CharactersInPlay {
+	private List<String> names;
+	private List<Integer> freqs;
+	public CharactersInPlay(){
+		names = new ArrayList<String>();
+		freqs = new ArrayList<Integer>();
+	}
+	public void update(String person){
+		if(person.length() == 0) return;
+		int idx = names.indexOf(person);
+		if(idx == -1){
+			names.add(person);
+			freqs.add(1);
+		}
+		else{
+			int freq = freqs.get(idx);
+			freqs.set(idx,freq+1);
+		}
+		
+		
+	
+	}
+	public void findAllCharacters(){
+		FileResource fr = new FileResource();
+		names.clear();
+		freqs.clear();
+		for(String line:fr.lines()){
+			update(getPerson(line));
+		}
+		for(int k = 0; k < names.size();k++){
+			System.out.println(freqs.get(k)+"--->"+names.get(k));
+		}
+	}
+	public String getPerson(String line){
+		String[] splitLine = line.split("\\.");
+//		StringBuilder sb = new StringBuilder();
+//		for(int i = 0; i < splitLine.length;i++){
+//			sb.append(splitLine[i]);
+//		}
+//		String str = sb.toString();
+//		return str;
+		return splitLine[1].trim();
+	}
+	
+
+	public static void main(String args[]){
+		CharactersInPlay cip = new CharactersInPlay();
+		cip.findAllCharacters();
+		
+	}
+
+}

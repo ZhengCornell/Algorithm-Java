@@ -1,0 +1,41 @@
+
+public class CaesarBreaker {
+	public static int[] countLetters(String msg){
+		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		int[] counts = new int[26];
+		for(char c:msg.toCharArray()){
+			char cuc = Character.toUpperCase(c);
+			if(Character.isAlphabetic(cuc)){
+				int idx = alphabet.indexOf(cuc);
+				counts[idx] += 1;
+			}
+		}
+		return counts;
+	}
+	
+	public static int maxIndex(int[] vals){
+		int idxOfMax = 0;
+		int maxSoFar = vals[0];
+		for(int i = 1; i < vals.length; i++){
+			if(maxSoFar < vals[i]){
+				maxSoFar = vals[i];
+				idxOfMax = i;
+			}
+		}
+		return idxOfMax;
+	}
+	public static String decrypt(String msg, int key){
+		StringBuilder sb = new StringBuilder(msg);
+		for(int i = 0; i < sb.length(); i++){
+			char decrypted = decrypt(sb.charAt(i),key);
+			sb.setCharAt(i,decrypted);
+		}
+		return sb.toString();
+	}
+	
+	public static char decrypt(char ch, int key){
+		char chUc = Character.toUpperCase(ch);
+		
+	}
+	
+}

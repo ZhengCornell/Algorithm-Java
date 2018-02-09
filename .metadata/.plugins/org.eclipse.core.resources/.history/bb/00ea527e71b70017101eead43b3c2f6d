@@ -1,0 +1,42 @@
+package week4;
+
+import java.util.*;
+import edu.duke.*;
+
+public class VigenereBreaker {
+    public String sliceString(String message, int whichSlice, int totalSlices) {
+       StringBuilder sb = new StringBuilder();
+       char[] ca = message.toCharArray();
+       for(int i = whichSlice; i < ca.length; i += totalSlices){
+    	   sb.append(ca[i]);
+       }
+       return sb.toString();
+    }
+    //得出分解体，以及对应每个分解体的key
+    public int[] tryKeyLength(String encrypted, int klength, char mostCommon) {
+        int[] key = new int[klength];
+        CaesarCracker cc = new CaesarCracker(mostCommon);
+        for(int i = 0; i < klength; i++){
+        	String slice = sliceString(encrypted,i,klength);
+        	key[i] = cc.getKey(slice);
+        }
+        return key;
+    }
+    	
+    public void breakVigenere () {
+       FileResource fr = new FileResource();
+       String input = fr.asString();
+       int[] key = tryKeyLength(input,5,'e');
+       VigenereCipher vc = new VigenereCipher(key);
+       System.out.println(vc.decrypt(input));
+    }
+    
+    
+    public static void main(String args[]){
+    	VigenereBreaker vb = new VigenereBreaker();
+//    	System.out.println(vb.sliceString("abcdefghijklm",0,3));
+//    	vb.tryKeylength();
+//    	vb.breakVigenere();
+    }
+    
+}

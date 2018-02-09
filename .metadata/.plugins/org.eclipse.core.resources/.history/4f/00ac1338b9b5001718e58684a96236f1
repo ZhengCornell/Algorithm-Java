@@ -1,0 +1,46 @@
+import java.io.File;
+
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+
+import edu.duke.FileResource;
+
+public class Part1 {
+	public static void tester(File src){
+		
+		FileResource fr = new FileResource(src);
+		CSVParser parser = fr.getCSVParser();
+		System.out.println(countryInfo(parser,"Germany"));
+		listExportersTwoProducts(parser,"gold","diamonds");
+	}
+	public static String countryInfo(CSVParser parser, String country){
+		for(CSVRecord record:parser){
+			String export  = record.get("Country");
+			if(export.contains(country)){
+				String str;
+//				System.out.println(record.get("Country")+record.get("Exports")+":");
+//				System.out.println(record.get("Value (dollars)"));
+				str = record.get("Country") + record.get("Exports") +":"+"\n"+ record.get("Value (dollars)");
+				return str;
+			}
+		}
+		return "NOT FOUND";
+	}
+	
+	public static void listExportersTwoProducts(CSVParser parser, String exportItem1, String exportItem2){
+		for(CSVRecord record:parser){
+			String e12 = record.get("Exports");
+			if(e12.contains(exportItem1)&&e12.contains(exportItem2)){
+				System.out.println(record.get("Country"));
+			}
+		}
+	}
+
+	
+	
+	public static void main(String args[]){
+		File src = new File("/Users/Gz/Desktop/eclipse/IOliu/src/io/file/exports_small.csv");
+		tester(src);
+	}
+	
+}

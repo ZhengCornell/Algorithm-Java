@@ -1,0 +1,35 @@
+package week1;
+
+import java.util.*;
+public class LargestQuakes {
+	public void findLargestQuakes(){
+		EarthQuakeParser parser = new EarthQuakeParser();
+        String source = "/Users/Gz/Desktop/eclipse/duke4/nov20quakedata.atom";
+        ArrayList<QuakeEntry> list = parser.read(source);
+//        for(QuakeEntry qe:list){
+//        	System.out.println(qe);
+//        }
+        System.out.println("# quakes read: " + list.size());
+        double maxMag = 0;
+        QuakeEntry maxMagQuake = null;
+        for(QuakeEntry qe:list){
+        	if(qe.getMagnitude() > maxMag){
+        		maxMagQuake = qe;
+        		maxMag = qe.getMagnitude();
+        	}
+        }
+        System.out.println(maxMagQuake);
+        
+        
+	}
+	
+	
+	
+	
+	
+	
+	public static void main(String args[]){
+		LargestQuakes lq = new LargestQuakes();
+		lq.findLargestQuakes();
+	}
+}

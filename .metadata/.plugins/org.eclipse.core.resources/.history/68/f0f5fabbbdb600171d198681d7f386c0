@@ -1,0 +1,44 @@
+package week2;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.duke.FileResource;
+
+public class WordFrequencies {
+	private List<String> myWords;
+	private List<Integer> myFreqs;
+	public WordFrequencies(){
+		myWords = new ArrayList<String>();
+		myFreqs = new ArrayList<Integer>();
+	}
+	public void findUnique(){
+		myWords.clear();
+		myFreqs.clear();
+		FileResource fr = new FileResource();
+		for(String word:fr.words()){
+			word = word.toLowerCase();
+			int idx = myWords.indexOf(word);
+			if(idx == -1){
+			myWords.add(word);//相当于操作尾部
+			myFreqs.add(1);
+			}else{
+			int value = myFreqs.get(idx);
+			myFreqs.set(idx,value+1);
+			}
+		}
+				
+	}
+	public void tester(){
+		findUnique();
+		System.out.println("# Unique words" +myWords.size());
+		for(int k = 0; k < myWords.size();k++){
+			System.out.println(myFreqs.get(k)+"--->"+myWords.get(k));
+		}
+	}
+	public static void main(String args[]){
+		WordFrequencies wf = new WordFrequencies();
+		wf.tester();
+	}
+	
+}

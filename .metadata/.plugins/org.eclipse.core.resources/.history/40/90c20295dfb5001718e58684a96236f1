@@ -1,0 +1,17 @@
+package week4;
+
+import org.apache.commons.csv.CSVRecord;
+
+import edu.duke.FileResource;
+
+public class BabyNames {
+	public static void printNames(){
+		FileResource fr = new FileResource();
+		for(CSVRecord rec:fr.getCSVParser(false)){
+			System.out.println("Name "+rec.get(0)+" Gender "+rec.get(1)+" Num Born "+rec.get(2));
+		}
+	}
+	public static void main(String args[]){
+		printNames();
+	}
+}

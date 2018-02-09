@@ -1,0 +1,6 @@
+package gen03;
+
+public class Banji<T> {
+	T stu;
+	
+}

@@ -1,0 +1,173 @@
+package week4;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.HashSet;
+
+import edu.duke.FileResource;
+
+public class VigenereBreaker {
+    private HashMap<String, HashSet<String>> dicts; 
+	private HashMap<String, Character> commonChars;
+    
+    public VigenereBreaker(){
+		dicts = new HashMap<String, HashSet<String>>();
+		commonChars = new HashMap<String, Character>();
+		readDict("Danish","/Users/Gz/Desktop/eclipse/duke3/dictionaries/Danish");
+		readDict("Dutch","/Users/Gz/Desktop/eclipse/duke3/dictionaries/Dutch");
+		readDict("English","/Users/Gz/Desktop/eclipse/duke3/dictionaries/English");
+		readDict("French","/Users/Gz/Desktop/eclipse/duke3/dictionaries/French");
+		readDict("German","/Users/Gz/Desktop/eclipse/duke3/dictionaries/German");
+		readDict("Italian","/Users/Gz/Desktop/eclipse/duke3/dictionaries/Italian");
+		readDict("Portuguese","/Users/Gz/Desktop/eclipse/duke3/dictionaries/Portuguese");
+		readDict("Spanish","/Users/Gz/Desktop/eclipse/duke3/dictionaries/Spanish");
+		readDict("Danish","/Users/Gz/Desktop/eclipse/duke3/dictionaries/Danish");
+		for(String langName:dicts.keySet()){
+			commonChars.put(langName,mostCommonCharIn(dicts.get(langName)));
+		}
+    }
+    private void readDict(String langName, String filepath){
+    	File src = new File(filepath);
+    	dicts.put(langName,readDictionary(new FileResource(src)));
+    }
+    
+    
+    
+    
+    public String sliceString(String message, int whichSlice, int totalSlices) {
+       StringBuilder sb = new StringBuilder();
+       char[] ca = message.toCharArray();
+       for(int i = whichSlice; i < ca.length; i += totalSlices){
+    	   sb.append(ca[i]);
+       }
+       return sb.toString();
+    }
+    //得出分解体，以及对应每个分解体的key
+    public int[] tryKeyLength(String encrypted, int klength, char mostCommon) {
+        int[] key = new int[klength];
+        CaesarCracker cc = new CaesarCracker(mostCommon);
+        for(int i = 0; i < klength; i++){
+        	String slice = sliceString(encrypted,i,klength);
+        	key[i] = cc.getKey(slice);
+        }
+        return key;
+    }
+    
+    public HashSet<String> readDictionary(FileResource fr){
+    	HashSet<String> set = new HashSet<String>();
+    	for(String word:fr.words()){
+    		set.add(word.toLowerCase());
+    	}
+    	return set;
+    }
+    public int countWords(String message, HashSet<String> dict){
+    	int count = 0;
+    	message = message.toLowerCase();
+    	String[] words = message.split("\\W+");
+    	for(String tempWord:words){
+    		if(dict.contains(tempWord)){
+    			count++;
+    		}
+    	}
+    	return count;
+    }
+    //用1-100来尝试解码
+    public String breakForLanguage(String encrypted, String langName){
+    	HashMap<int[], Integer> keysMap = new HashMap<int[], Integer>();
+    	HashSet<String> dict = dicts.get(langName);
+    	char commonChar = commonChars.get(langName);
+    	for(int i = 1; i <= 100; i++){
+    		int[] key = tryKeyLength(encrypted,i,commonChar);
+    		VigenereCipher vc = new VigenereCipher(key);
+    		String decrypted = vc.decrypt(encrypted);
+    		int cnt = countWords(decrypted,dict);
+    		keysMap.put(key,cnt);//这串钥匙对应解出来的字
+    	}
+    	int maxCount = 0;
+    	int[] foundKey = null;
+    	for(int[] key:keysMap.keySet()){
+    		if(maxCount < keysMap.get(key)){
+    			maxCount = keysMap.get(key);
+    			foundKey = key;
+    		}
+    	}
+    	System.out.println("The keys are: " + foundKey.length+" for the "+langName+" They are ");
+    	for(int i = 0; i < foundKey.length; i++){
+    		System.out.print(foundKey[i]+"\t");
+    	}
+    		System.out.println("");
+    	VigenereCipher vc = new VigenereCipher(foundKey);
+    	System.out.println("Decrypted words are: "+countWords(vc.decrypt(encrypted),dict));
+    	return vc.decrypt(encrypted);
+    }
+
+    public void breakVigenere () {
+       FileResource fr = new FileResource();
+       String input = fr.asString();
+//       breakForAllLangs(input);
+//       int[] key = tryKeyLength(input,4,'e');
+//       VigenereCipher vc = new VigenereCipher(key);
+       String decrypted = breakForLanguage(input,"French");
+       System.out.println(decrypted);
+    }
+    
+    public char mostCommonCharIn(HashSet<String> dict){
+    	//在这个字典中，每个字母对应其出现次数
+    	HashMap<Character, Integer> charCounts = new HashMap<Character, Integer>();
+    	for(String word:dict){
+    		for(char c:word.toLowerCase().toCharArray()){
+    			if(!charCounts.containsKey(c)){
+    				charCounts.put(c,1);
+    			}
+    			else{
+    				charCounts.put(c,charCounts.get(c)+1);
+    			}
+    		}
+    	}
+    	int maxFreq = 0;
+    	char mostCommon = 'a';
+    	for(char c:charCounts.keySet()){
+    		if(charCounts.get(c) > maxFreq){
+    			maxFreq = charCounts.get(c);
+    			mostCommon = c;
+    		}
+    	}
+    	return mostCommon;
+    }
+    
+    public String breakForAllLangs(String encrypted){
+    		for(String langName:dicts.keySet()){
+    			breakForLanguage(encrypted,langName);
+    	}
+    		return "";
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    public static void main(String args[]){
+
+    	VigenereBreaker vb = new VigenereBreaker();
+//    	System.out.println(vb.sliceString("abcdefghijklm",0,3));
+//    	FileResource fr = new FileResource();
+//        String input = fr.asString();
+//    	int[] key = vb.tryKeyLength(input,4,'e');
+//    	for(int i = 0; i < key.length; i++){
+//    		System.out.println(key[i]);
+//    	}
+    	vb.breakVigenere();
+    }
+    
+}

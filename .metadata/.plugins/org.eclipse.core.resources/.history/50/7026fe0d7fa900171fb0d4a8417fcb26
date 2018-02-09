@@ -1,0 +1,38 @@
+package gen03;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+public class StudentApp {
+
+	public static void main(String[] args) {
+	Student<String> stu = new Student<String>();
+	
+	stu.setScore("优秀");//成绩装入学生
+	System.out.println(stu.getScore());
+	//泛型嵌套
+	Banji<Student<String>> bj = new Banji<Student<String>>();
+	bj.setStu(stu);//学生装入班级
+	stu=bj.getStu();//班级中提取学生
+	String s = stu.getScore();//学生中提取成绩
+	System.out.println(bj.stu.getScore());
+	
+	//HashMap
+	Map<String,String> m = new HashMap<String,String>();
+	m.put("1","一");
+	m.put("2","二");
+	m.put("3","三");
+	Set<Entry<String,String>> e = m.entrySet();//装入了
+	for(Entry<String,String> entry:e){
+		String key = entry.getKey();
+		String value = entry.getValue();
+		System.out.println(key + value);
+	}
+	
+	
+	
+
+	}
+}

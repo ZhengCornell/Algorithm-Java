@@ -1,0 +1,98 @@
+import edu.duke.FileResource;
+
+public class CaesarBreaker {
+	public static int[] countLetters(String msg){
+		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		int[] counts = new int[26];
+		for(char c:msg.toCharArray()){
+			char cuc = Character.toUpperCase(c);
+			if(Character.isAlphabetic(cuc)){
+				int idx = alphabet.indexOf(cuc);
+				counts[idx] += 1;
+			}
+		}
+		return counts;
+	}
+	
+	public static int maxIndex(int[] vals){
+		int idxOfMax = 0;
+		int maxSoFar = vals[0];
+		for(int i = 1; i < vals.length; i++){
+			if(maxSoFar < vals[i]){
+				maxSoFar = vals[i];
+				idxOfMax = i;
+			}
+		}
+		return idxOfMax;
+	}
+	public static String decrypt(String msg, int key){
+		StringBuilder sb = new StringBuilder(msg);
+		for(int i = 0; i < sb.length(); i++){
+			char decrypted = decrypt(sb.charAt(i),key);
+			sb.setCharAt(i,decrypted);
+		}
+		return sb.toString();
+	}
+	
+	public static char decrypt(char ch, int key){
+		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		char chUc = Character.toUpperCase(ch);
+		int idx  = alphabet.indexOf(chUc);
+		if(idx == -1) return ch;
+		int didx = (idx - key) % 26;
+		if(didx < 0) didx += 26;
+		char dch = alphabet.charAt(didx);
+		if(Character.isUpperCase(ch)) return dch;
+		else return Character.toLowerCase(dch);
+	}
+	
+	public static int getKey(String msg){
+		int[] counts = countLetters(msg);
+		int idxOfMax = maxIndex(counts);
+		final int IND_E = 4;
+		int key = idxOfMax - IND_E;
+		if(key < 0) return key + 26;
+		else return key;
+	}
+	public static String decryptOneKey(String encrypted){
+		return decrypt(encrypted, getKey(encrypted));        
+	}
+	public static String halfOfString(String msg, int start){
+		StringBuilder sb = new StringBuilder();
+		for(int i = start; i < msg.length(); i++){
+			sb.append(msg.charAt(i));
+		}
+		return sb.toString();
+	}
+	public static String mix(String s0, String s1){
+		StringBuilder sb = new StringBuilder(s0+s1);
+		for(int i = 0; i < s0.length(); i++){
+			sb.setCharAt(2*i,s0.charAt(i));
+		}
+		for(int j = 0; j < s1.length(); j++){
+			sb.setCharAt(2*j+1,s1.charAt(j));
+		}
+		return sb.toString();
+	}
+	public static String decrtptTwoKeys(String msg){
+		String s0 = halfOfString(msg,0);
+		String s1 = halfOfString(msg,1);
+        System.out.printf("key1: %d\tkey2: %d\n", getKey(s0), getKey(s1));
+        String dec0 = decryptOneKey(s0);
+        String dec1 = decryptOneKey(s1);
+        return mix(dec0,dec1);
+	}
+	public static String decrypt(String encrypted, int key0, int key1){
+        String s0 = halfOfString(encrypted, 0);
+        String s1 = halfOfString(encrypted, 1);      
+        String dec0 = decrypt(s0, key0);
+        String dec1 = decrypt(s1, key1);       
+        return mix(dec0, dec1);
+	}
+	public static void main(String args[]){
+		FileResource fr = new FileResource();
+		String str = fr.asString();
+		System.out.println(decrtptTwoKeys(str));
+	}
+	
+}

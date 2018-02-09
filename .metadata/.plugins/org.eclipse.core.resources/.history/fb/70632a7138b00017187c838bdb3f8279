@@ -1,0 +1,5 @@
+package princeton.day1;
+
+public class QuickUnionUF {
+
+}

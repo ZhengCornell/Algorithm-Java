@@ -1,0 +1,47 @@
+import java.util.HashMap;
+import java.util.Map;
+
+import edu.duke.FileResource;
+
+public class WordLengths {
+	public static void countWordLengths(FileResource fr, int[] counts){
+		Map<String,Integer> wordList = new HashMap<String,Integer>();
+//		String[] wordList = new String[counts.length];
+		int maxLength = 0;
+		boolean isWord = true;
+		String alphabet = "abcdefghijklmnopqrstuvwxyz";
+		for(String s:fr.words()){
+			for(int i = 0; i < s.length(); i++){
+				char currtChar = s.charAt(i);
+				int idx = alphabet.indexOf(Character.toLowerCase(currtChar));
+				if(idx == -1){
+					isWord = false;
+				}
+			}
+			if(maxLength == 0){
+				maxLength = s.length();
+			}else if (maxLength != 0 && maxLength<s.length()){
+				maxLength = s.length();
+			}
+			if(isWord){
+			counts[s.length()] += 1;
+			wordList.put(s,s.length());
+			}
+		}
+		for(int j = 1; j < maxLength + 1; j++){
+			System.out.print("长度为"+j+"的有");
+			System.out.print(counts[j]+":");
+			for(String temp:wordList.keySet()){
+				if(wordList.get(temp)==j){
+					System.out.print(temp);
+				}
+			}
+			System.out.println("\n");
+		}
+	}
+	
+	public static void main(String args[]){
+		FileResource fr = new FileResource("/Users/Gz/Desktop/eclipse/CSVFirstAssignments/common.txt");
+		countWordLengths(fr,new int[20]);
+	}
+}

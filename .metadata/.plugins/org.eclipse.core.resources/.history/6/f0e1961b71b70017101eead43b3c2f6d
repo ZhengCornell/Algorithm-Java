@@ -1,0 +1,32 @@
+package week4;
+
+import java.util.*;
+import edu.duke.*;
+
+public class VigenereBreaker {
+    public String sliceString(String message, int whichSlice, int totalSlices) {
+       StringBuilder sb = new StringBuilder();
+       char[] ca = message.toCharArray();
+       for(int i = whichSlice; i < ca.length; i += totalSlices){
+    	   sb.append(ca[i]);
+       }
+       return sb.toString();
+    }
+
+    public int[] tryKeyLength(String encrypted, int klength, char mostCommon) {
+        int[] key = new int[klength];
+        //WRITE YOUR CODE HERE
+        return key;
+    }
+
+    public void breakVigenere () {
+        //WRITE YOUR CODE HERE
+    }
+    
+    
+    public static void main(String args[]){
+    	VigenereBreaker vb = new VigenereBreaker();
+    	System.out.println(vb.sliceString("abcdefghijklm",0,3));
+    }
+    
+}

@@ -1,0 +1,7 @@
+import edu.duke.FileResource;
+
+public class WordLengths {
+	public static void countWordLengths(FileResource fr, int[] counts){
+		
+	}
+}

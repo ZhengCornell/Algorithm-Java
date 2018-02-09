@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;CaesarCipher&apos; to &apos;WordPlay&apos;&#x0A;- Original project: &apos;CSVFirstAssignments&apos;&#x0A;- Original element: &apos;CaesarCipher&apos;&#x0A;- Renamed element: &apos;WordPlay&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;CaesarCipher&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;{CaesarCipher.java[CaesarCipher" matchStrategy="1" name="WordPlay" qualified="false" references="true" similarDeclarations="false" stamp="1508611077092" textual="true" version="1.0"/>
+</session>

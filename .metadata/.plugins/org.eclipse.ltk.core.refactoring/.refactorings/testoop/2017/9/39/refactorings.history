@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move element &apos;Student.java&apos; to &apos;testoop/src/static1&apos;&#x0A;- Original project: &apos;testoop&apos;&#x0A;- Destination element: &apos;testoop/src/static1&apos;&#x0A;- Original element: &apos;oritented.oop.Student.java&apos;&#x0A;- Update references to refactored element" description="Move compilation unit" destination="/src&lt;static1" element1="/src&lt;oritented.oop{Student.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" patterns="*" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1506711469781" units="1" version="1.0"/>
+</session>

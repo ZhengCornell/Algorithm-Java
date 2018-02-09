@@ -1,0 +1,73 @@
+package week4;
+
+import java.io.File;
+
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+
+import edu.duke.FileResource;
+
+public class gg {
+	public static void totalBirths(){
+		int totalBoyBirths = 0;
+		int totalGirlBirths = 0;
+		FileResource fr = new FileResource();
+		CSVParser parser = fr.getCSVParser(false);
+		for(CSVRecord rec:parser){
+			int numBorn = Integer.parseInt(rec.get(2));
+			if(rec.get(1).equals("F")){
+			totalGirlBirths += numBorn;
+			}else{
+			totalBoyBirths += numBorn;
+			}
+			System.out.println(rec.get(0));
+		}
+		System.out.println("numBoy:"+totalBoyBirths+"\n"+"numGirl:"+totalGirlBirths);
+	}
+	
+	public static int getRank(int year,String name,String gender){
+		String path = "/Users/Gz/Desktop/eclipse/duke2/";
+		String filepath = path +"yob"+year+"short.csv";
+		File src = new File(filepath);
+		FileResource fr = new FileResource(src);
+		CSVParser parser = fr.getCSVParser(false);
+		int rank = 0;
+		CSVRecord prevRec = null;
+		for(CSVRecord record:fr.getCSVParser(false)){
+			if(record.get(1).equals(gender)){
+				int num = Integer.parseInt(record.get(2));
+				if(prevRec != null && num == Integer.parseInt(prevRec.get(2))){
+					rank = rank;
+				}else{
+					rank = rank + 1;
+				}
+				if(record.get(0).equals(name)){
+					return rank;
+				}
+				prevRec = record;
+			}				
+		}
+		return -1;
+	}
+	
+	public static String getName(int year, int rank, String gender){
+		String path = "/Users/Gz/Desktop/eclipse/duke2/";
+		String filepath = path +"yob"+year+"short.csv";
+		File src = new File(filepath);
+		FileResource fr = new FileResource(src);
+		CSVParser parser = fr.getCSVParser(false);
+		for(CSVRecord record:parser){
+			if()
+		}
+	}
+	
+	
+	public static void main(String agrs[]){
+//		System.out.println(getRank(2012,"Ethan","M"));
+		String path = "/Users/Gz/Desktop/eclipse/duke2/";
+		String filepath = path +"yob"+2012+"short.csv";
+		File src = new File(filepath);
+		System.out.println(src.getName());
+	}
+
+}

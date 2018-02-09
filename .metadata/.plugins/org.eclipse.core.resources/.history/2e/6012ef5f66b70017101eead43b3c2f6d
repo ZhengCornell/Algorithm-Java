@@ -1,0 +1,202 @@
+package week3;
+
+
+/**
+ * Write a description of class LogAnalyzer here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+
+import java.util.*;
+import edu.duke.*;
+
+public class LogAnalyzer
+{
+     private ArrayList<LogEntry> records;
+     
+     public LogAnalyzer() {
+         records = new ArrayList<LogEntry>();
+     }
+        
+     public void readFile() {
+         FileResource fr = new FileResource();
+         for(String line:fr.lines()){
+//        	 System.out.println(WebLogParser.parseEntry(line).toString());
+        	 records.add(WebLogParser.parseEntry(line));//装入的是logEntry格式
+        	 
+         }
+     }
+        
+     public void printAll() {
+         for (LogEntry le : records) {
+             System.out.println(le);
+         }
+     }
+     public int countUniqueIPs(){
+    	 int countUnique = 0;
+    	 List<String> l = new ArrayList<String>();//装ip的list
+    	 for (LogEntry le: records){
+    		 if(!l.contains(le.getIpAddress())){
+    			 l.add(le.getIpAddress());
+    			 countUnique++;
+    		 }else{
+    			 continue;
+    		 }
+    	 }
+    	 return countUnique;
+     }
+     public void printAllHigherThanNum(int num){
+    	 ArrayList<Integer> list = new ArrayList<Integer>();
+    	 System.out.println("Status more than " + num + " is");
+    	 for(LogEntry le:records){
+    		 if(le.getStatusCode() > num){
+    			 System.out.println(le.toString());
+    			 if(!list.contains(le.getStatusCode())){
+    				 list.add(le.getStatusCode());
+    			 }
+    		 }
+    	 }
+    	 for(Integer temp:list){
+    		 System.out.print(temp+"\t");
+    	 }
+     }
+     public ArrayList<String> uniqueIPVisitsOnDay(String someday){
+    	 ArrayList<String> list = new ArrayList<String>();//装当天所有不同ip的list
+    	 for(LogEntry le:records){
+    		 String leTime = le.getAccessTime().toString();//把日子变成string先
+    		 String leIP = le.getIpAddress();
+    		 if(leTime.indexOf(someday) != -1){
+    			 if(!list.contains(leIP)){
+    				 list.add(leIP);
+    			 }
+    		 }
+    	 } 
+    	 return list;
+     }
+     public int countUniqueIPsInRange(int low, int high){//code在这之间的不同的ip地址
+//    	 System.out.println("Status between "+low+" and "+high+" is ");
+    	 ArrayList<String> arr = new ArrayList<String>();
+    	 for(LogEntry le:records){
+    		 if(le.getStatusCode() >= low && le.getStatusCode() <= high){
+    			 if(!arr.contains(le.getIpAddress())){
+    				 arr.add(le.getIpAddress());
+    			 }
+    		 }
+    	 }
+    	 return arr.size();
+     }
+     
+//   每个ip出现的次数(在整个文件中)
+     public HashMap<String, Integer> countVisitsPerIP(){
+    	 HashMap<String, Integer> counts = new HashMap<String, Integer>();
+    	 for(LogEntry le:records){
+    		 String ipA = le.getIpAddress();
+    		 if(!counts.containsKey(ipA)){
+    			 counts.put(ipA,1);
+    		 }else{
+    			 counts.put(ipA,counts.get(ipA)+1);
+    		 }
+    	 }
+    	 return counts;
+     }
+//     找到访问最多次的ip
+     public int mostNumberVisitsByIP(HashMap<String, Integer> counts){
+    	 int max = 0;
+    	 for(String tempKey:counts.keySet()){
+    		 int count  = counts.get(tempKey);
+    		 if(max < count){
+    			 max = count;
+    		 }
+    	 }
+    	 return max;
+     }
+     
+     public ArrayList<String> iPsMostVisits(HashMap<String, Integer> counts){
+    	 ArrayList<String> ips = new ArrayList<String>();
+    	 int maxCount = 0;
+    	 for(String tempIp:counts.keySet()){
+    		 if(maxCount <= counts.get(tempIp)){
+    			 maxCount = counts.get(tempIp);
+    			 ips.add(tempIp);
+    		 }
+    	 }
+    	 return ips;
+     }
+     
+     
+     
+     
+     
+     
+//     创建了一个日子 与 ip地址集合 的map
+
+
+     
+     	public HashMap<String,ArrayList<String>> iPsForDays(){
+    	 HashMap<String,ArrayList<String>> map = new HashMap<String,ArrayList<String>>();
+    	 for(LogEntry le:records){
+    		 String day = le.getAccessTime().toString().substring(4,10);
+    		 String ip = le.getIpAddress();
+    		 if(!map.containsKey(day)){
+    			 ArrayList<String> list = new ArrayList<String>();
+    			 list.add(ip);
+    			 map.put(day,list);
+    		 }else{
+    			 map.get(day).add(ip);
+    		 }
+    	 }
+    	 return map;
+     }
+//     找出被(可以重复)ip访问最多的日子
+     public String dayWithMostIPVisits(HashMap<String, ArrayList<String>> map){
+     int max = 0;
+     String most = null;
+     for(String day:map.keySet()){
+    	 int size = map.get(day).size();
+    	 if(max < size){
+    		 max = size;
+    		 most = day;
+    	 }
+     }
+     return most;
+     }
+//     找出这个日子里 访问次数最多的ip地址名
+     public ArrayList<String> iPsWithMostVisitsOnDay(HashMap<String, ArrayList<String>> map, String day){
+    	 //装 ip 和对应出现次数 的map
+    	 HashMap<String, Integer> counts = new HashMap<String, Integer>();
+    	 //完成返回任务的list
+    	 ArrayList<String> list = new ArrayList<String>();
+    	 int maxCount = 0;
+    	 ArrayList<String> dangriips = map.get(day);
+    	 for(String ip:dangriips){
+    		 if(!counts.containsKey(ip)){
+    			 counts.put(ip,1);
+    		 }else{
+    			 counts.put(ip,counts.get(ip)+1);
+    		 }
+    	 }
+    	 //此时counts已经装满了不同的ip 以及 其对应次数，遍历它！
+    	 for(String key:counts.keySet()){
+    		 if(maxCount <= counts.get(key)){
+    			 maxCount = counts.get(key);
+    			 list.add(key);
+    		 }
+    	 }
+    	 return list;
+     }
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+}     

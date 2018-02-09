@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;PriQ&apos; to &apos;BST&apos;&#x0A;- Original project: &apos;yanjiu&apos;&#x0A;- Original element: &apos;PriQ&apos;&#x0A;- Renamed element: &apos;BST&apos;&#x0A;- Update references to refactored element&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;PriQ&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;{PriQ.java[PriQ" matchStrategy="1" name="BST" qualified="false" references="true" similarDeclarations="false" stamp="1508379793920" textual="true" version="1.0"/>
+</session>

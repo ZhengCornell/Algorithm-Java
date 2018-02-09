@@ -1,0 +1,159 @@
+package week2;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+
+import edu.duke.FileResource;
+import edu.duke.URLResource;
+
+public class GladLibMap {
+	private HashMap<String,ArrayList<String>> wordMap;
+	private int wordCount = 0;
+	private ArrayList<String> usedWords;
+	private ArrayList<String> usedLabels;
+	private Random myRandom;
+	private String source = "/Users/Gz/Desktop/eclipse/duke3/GladLib/data";
+	
+	public GladLibMap(String source){
+		initializeFromSource(source);
+		myRandom = new Random();
+		usedLabels = new ArrayList<String>();
+	}
+	private void putList(String fname){
+		wordMap.put(fname,readIt(source+"/"+fname+".txt"));
+	}
+	
+	private void initializeFromSource(String source) {
+		wordMap = new HashMap<String,ArrayList<String>>();
+		putList("adjective");
+		putList("noun");
+		putList("color");
+		putList("country");
+		putList("name");
+		putList("animal");
+		putList("timeframe");
+		putList("verb");
+		putList("fruit");
+		ArrayList<String> nums = new ArrayList<String>();
+		for(int i = 0; i < 50; i++) nums.add(Integer.toString(i));
+		wordMap.put("number",nums);
+		usedWords = new ArrayList<String>();
+	}
+	
+	private String randomFrom(String key){
+		String randWord;
+		ArrayList<String> source = wordMap.get(key);
+		if(!usedLabels.contains(key)) usedLabels.add(key);
+		while(true){
+		int index = myRandom.nextInt(source.size());
+		randWord = source.get(index);
+		int usedIndex = usedWords.indexOf(randWord);
+		if(usedIndex == -1){
+			break;
+		}else{
+			continue;
+		}
+		}
+		usedWords.add(randWord);
+		wordCount++;
+		return randWord;
+	}
+	
+	private String getSubstitute(String label) {
+		if(wordMap.containsKey(label)) return randomFrom(label);
+		return "**UNKNOWN**";
+	}
+	
+	private String processWord(String w){
+		int first = w.indexOf("<");
+		int last = w.indexOf(">",first);
+		if (first == -1 || last == -1){
+			return w;
+		}
+		String prefix = w.substring(0,first);
+		String suffix = w.substring(last+1);
+		String sub = getSubstitute(w.substring(first+1,last));
+		return prefix+sub+suffix;
+	}
+	
+	private void printOut(String s, int lineWidth){
+		int charsWritten = 0;
+		for(String w : s.split("\\s+")){
+			if (charsWritten + w.length() > lineWidth){
+				System.out.println();
+				charsWritten = 0;
+			}
+			System.out.print(w+" ");
+			charsWritten += w.length() + 1;
+		}
+	}
+	
+	private String fromTemplate(String source){
+		String story = "";
+		if (source.startsWith("http")) {
+			URLResource resource = new URLResource(source);
+			for(String word : resource.words()){
+				story = story + processWord(word) + " ";
+			}
+		}
+		else {
+			FileResource resource = new FileResource(source);
+			for(String word : resource.words()){
+				story = story + processWord(word) + " ";
+			}
+		}
+		usedWords.clear();
+		return story;
+	}
+	
+	private ArrayList<String> readIt(String source){
+		ArrayList<String> list = new ArrayList<String>();
+		if (source.startsWith("http")) {
+			URLResource resource = new URLResource(source);
+			for(String line : resource.lines()){
+				list.add(line);
+			}
+		}
+		else {
+			FileResource resource = new FileResource(source);
+			for(String line : resource.lines()){
+				list.add(line);
+			}
+		}
+		return list;
+	}
+	public int totalWordsInMap(){
+    	int cnt = 0;
+    	for (String key : wordMap.keySet()) {
+    		for (String word : wordMap.get(key)) cnt++;
+    	}
+    	return cnt;
+    	
+    }
+	public int totalWordsConsidered() {
+    	int cnt = 0;
+    	for (String label : usedLabels)
+    		for (String word : wordMap.get(label)) {
+    			cnt++;
+    		}
+    	return cnt;	
+    }
+	
+	
+	public void makeStory(){
+	    System.out.println("\n");
+//		String story = fromTemplate("/Users/Gz/Desktop/eclipse/duke3/GladLib/data/madtemplate.txt");
+		String story2 = fromTemplate("/Users/Gz/Desktop/eclipse/duke3/GladLib/data/madtemplate2.txt");
+		printOut(story2, 60);
+		System.out.println("\nRepalced words: " + wordCount);
+		System.out.println("\nTotal words: " + totalWordsInMap());
+		System.out.println("\nTotal words considered: " + totalWordsConsidered());
+		wordCount = 0;
+	}
+	public static void main(String args[]){
+		GladLibMap glm = new GladLibMap("/Users/Gz/Desktop/eclipse/duke3/GladLib/data");
+		glm.makeStory();
+	}
+	
+}

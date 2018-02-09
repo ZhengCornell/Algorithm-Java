@@ -1,0 +1,88 @@
+package week2;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.duke.FileResource;
+
+public class CharactersInPlay {
+	private List<String> names;
+	private List<Integer> freqs;
+	public CharactersInPlay(){
+		names = new ArrayList<String>();
+		freqs = new ArrayList<Integer>();
+	}
+	public void update(String person){
+		if(person.length() == 0) return;
+		int idx = names.indexOf(person);
+		if(idx == -1){
+			names.add(person);
+			freqs.add(1);
+		}
+		else{
+			int freq = freqs.get(idx);
+			freqs.set(idx,freq+1);
+		}
+		
+		
+	
+	}
+	public void findAllCharacters(){
+		FileResource fr = new FileResource();
+		names.clear();
+		freqs.clear();
+		for(String line:fr.lines()){
+			update(getPerson(line));
+		}
+		
+	}
+	public String getPerson(String line){
+		String[] splitLine = line.split("\\.");
+//		int idx = line.indexOf("\\.");
+//		if(idx == -1) {
+//			return "";
+//		}
+//		String oriName = line.substring(0,idx);
+//		return oriName;
+//		if(oriName)
+		return splitLine[0].trim();
+	}
+	public void tester(){
+		findAllCharacters();
+//		for(int k = 0; k < names.size();k++){
+//			System.out.println(freqs.get(k)+"--->"+names.get(k));
+//		}
+		charactersWithNumParts(10,15);
+//		int idx = findIndexOfMax();
+//		System.out.println("Most"+names.get(idx)+freqs.get(idx));
+	}
+	public void charactersWithNumParts(int num1, int num2){
+		for(int i = 0; i < names.size(); i++){
+			int freq = freqs.get(i);
+			if(freq>=num1&&freq<=num2){
+				String name = names.get(i);
+				System.out.println("name is "+name+" freq is "+freq);
+			}
+		}
+	}
+	
+	public int findIndexOfMax() {
+        int indOfMax=0;
+        int maxSoFar = freqs.get(indOfMax);
+        for (int i=1; i<freqs.size(); i++) {
+            int iFreq = freqs.get(i);
+            if (iFreq > maxSoFar) {
+                indOfMax = i;
+                maxSoFar = iFreq;
+            }
+        
+        }
+        return indOfMax;
+    }
+	public static void main(String args[]){
+		CharactersInPlay cip = new CharactersInPlay();
+		cip.tester();
+		
+	}
+
+}

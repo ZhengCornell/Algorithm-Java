@@ -1,0 +1,38 @@
+package week4;
+
+import org.apache.commons.csv.CSVRecord;
+
+import edu.duke.FileResource;
+
+public class BabyNames {
+	public static void printNames(){
+		FileResource fr = new FileResource();
+		for(CSVRecord rec:fr.getCSVParser(false)){
+			int numBorn = Integer.parseInt(rec.get(2));
+			if(numBorn <= 7){
+			System.out.println("Name "+rec.get(0)+" Gender "+rec.get(1)+" Num Born "+rec.get(2));
+			}
+			}
+	}
+	
+	public static void totalBirths(){
+		int totalBirths = 0;
+		FileResource fr = new FileResource();
+		for(CSVRecord rec:fr.getCSVParser(false)){
+			int numBorn = Integer.parseInt(rec.get(2));
+			if(rec.get(1).equals("F")){
+			totalBirths += numBorn;
+			}
+		}
+		System.out.println(totalBirths);
+	}
+	
+	
+	
+	
+	
+	public static void main(String args[]){
+//		printNames();
+		totalBirths();
+	}
+}

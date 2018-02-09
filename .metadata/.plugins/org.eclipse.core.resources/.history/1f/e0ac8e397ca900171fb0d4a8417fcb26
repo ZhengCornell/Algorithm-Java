@@ -1,0 +1,17 @@
+package gen03;
+
+public class StudentApp {
+
+	public static void main(String[] args) {
+	Student<String> stu = new Student<String>();
+	
+	stu.setScore("优秀");
+	System.out.println(stu.getScore());
+	
+	Banji<Student<String>> bj = new Banji<Student<String>>();
+	bj.setStu(stu);
+	stu=bj.getStu();
+	System.out.println(bj.getStu().getScore());
+
+	}
+}

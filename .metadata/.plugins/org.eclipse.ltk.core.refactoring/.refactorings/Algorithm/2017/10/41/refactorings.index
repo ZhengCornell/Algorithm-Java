@@ -1,0 +1,23 @@
+1507820334606	Rename field 'count'
+1507835113809	Delete element
+1507835319376	Delete element
+1507837310548	Rename local variable 'a0'
+1507837323559	Rename local variable 'a1'
+1507837332695	Rename local variable 'a2'
+1507837340664	Rename local variable 'a3'
+1507837348709	Rename local variable 'a4'
+1507837374341	Rename local variable 'a5'
+1507839433849	Rename type 'Bag'
+1507920111126	Delete element
+1507921007990	Move compilation unit
+1507921031985	Move compilation unit
+1507997318729	Change method 'dequeue'
+1508009209003	Rename field 'N'
+1508010728959	Rename type 'Subset'
+1508010904029	Copy compilation unit
+1508012273252	Rename type 'RandomizedQueue'
+1508012292002	Rename type 'Permutation'
+1508012305832	Rename type 'Deque'
+1508012309810	Move compilation unit
+1508012312298	Move compilation unit
+1508012314659	Move compilation unit
